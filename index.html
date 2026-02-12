@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Clicker King: All Themes Fixed</title>
+    <title>Clicker King: Final Restore</title>
     <style>
         :root { --accent: #38bdf8; --bg: #0f172a; --gold: #f59e0b; --diamond: #00f2ff; --purple: #a855f7; --red: #ff4444; --admin: #22c55e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; }
-        
         body { background: var(--bg); color: white; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; transition: 0.5s; }
 
-        /* --- СТИЛІ ФОНІВ --- */
+        /* Фони */
         .bg-ukraine { background: linear-gradient(to bottom, #0057b7 50%, #ffd700 50%) !important; }
         .bg-space { background: radial-gradient(circle, #1e1b4b, #000) !important; }
         .bg-neon { background: linear-gradient(135deg, #ff00ff, #00ffff) !important; }
@@ -18,103 +17,135 @@
         .bg-king { background: linear-gradient(45deg, #f59e0b, #78350f, #facc15) !important; animation: shine 3s infinite alternate; }
         @keyframes shine { from { filter: brightness(1); } to { filter: brightness(1.2); } }
 
-        .card { background: rgba(15, 23, 42, 0.95); padding: 20px; border-radius: 30px; width: 95%; max-width: 400px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(15px); }
+        .card { background: rgba(15, 23, 42, 0.95); padding: 20px; border-radius: 30px; width: 95%; max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
         .income-info { font-size: 0.8rem; color: #4ade80; margin-bottom: 10px; font-weight: bold; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 12px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .stat-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .stat-val { font-size: 0.9rem; font-weight: 900; display: block; }
-
-        #click-btn { width: 110px; height: 110px; border-radius: 50%; border: none; background: var(--accent); color: white; font-weight: 900; font-size: 1.2rem; cursor: pointer; box-shadow: 0 8px 25px rgba(56,189,248,0.4); margin: 10px auto 15px; transition: 0.1s; }
+        
+        #click-btn { 
+            width: 120px; height: 120px; border-radius: 50%; border: none; 
+            background: var(--accent); color: white; font-size: 3.5rem; 
+            cursor: pointer; box-shadow: 0 8px 25px rgba(56,189,248,0.4); 
+            margin: 15px auto; transition: 0.1s; display: flex; align-items: center; justify-content: center;
+        }
         #click-btn:active { transform: scale(0.9); }
+        .skin-ua { background: linear-gradient(#0057b7, #ffd700) !important; border-radius: 20px !important; }
+        .skin-king { background: radial-gradient(#fff7ad, #ffa200) !important; box-shadow: 0 0 30px gold !important; }
 
-        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 15px; }
-        .tabs.admin-active { grid-template-columns: repeat(5, 1fr); }
-        .tab-btn { padding: 10px 2px; border: none; border-radius: 8px; background: #334155; color: white; font-size: 0.65rem; font-weight: bold; cursor: pointer; }
+        .tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 15px; }
+        .tabs.admin-active { grid-template-columns: repeat(6, 1fr); }
+        .tab-btn { padding: 10px 2px; border: none; border-radius: 8px; background: #334155; color: white; font-size: 0.6rem; font-weight: bold; cursor: pointer; }
         .tab-btn.active { background: var(--accent); }
 
         .section { display: none; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
         .section.active { display: flex; }
 
-        .row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 12px; border-radius: 15px; }
-        .action-btn { background: #22c55e; border: none; color: white; padding: 8px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.75rem; min-width: 85px; }
-        .action-btn:disabled { background: #1e293b; color: #475569; }
+        .row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 10px; border-radius: 12px; }
+        .action-btn { background: #22c55e; border: none; color: white; padding: 6px 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
         .btn-owned { background: var(--purple) !important; }
-        
-        input { width: 100%; padding: 12px; border-radius: 12px; border: none; background: rgba(255,255,255,0.1); color: white; text-align: center; margin-bottom: 10px; }
     </style>
 </head>
 <body id="main-bg">
 
 <div class="card">
-    <div class="stats-grid">
-        <div class="stat-item"><span style="font-size:0.55rem; opacity:0.6;">ГРОШІ</span><span id="bal-c" class="stat-val" style="color:var(--accent)">0</span></div>
-        <div class="stat-item"><span style="font-size:0.55rem; opacity:0.6;">ГЕМИ</span><span id="bal-d" class="stat-val" style="color:var(--diamond)">0</span></div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+        <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:15px;">💰 <span id="bal-c">0</span></div>
+        <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:15px;">💎 <span id="bal-d">0</span></div>
     </div>
 
-    <div id="income-display" class="income-info">Дохід: +0</div>
-    
+    <div id="income-display" class="income-info">Клік: +0</div>
     <button id="click-btn" onclick="doClick()">КЛІК</button>
 
     <div id="tab-bar" class="tabs">
-        <button class="tab-btn active" onclick="tab('up', this)">Сила</button>
-        <button class="tab-btn" onclick="tab('th', this)">Фони</button>
-        <button class="tab-btn" onclick="tab('cd', this)">Коди</button>
+        <button class="tab-btn active" onclick="tab('up', this)">🚀</button>
+        <button class="tab-btn" onclick="tab('th', this)">🏞️</button>
+        <button class="tab-btn" onclick="tab('sk', this)">🎭</button>
+        <button class="tab-btn" onclick="tab('cd', this)">🔑</button>
         <button id="admin-tab-btn" class="tab-btn" style="display:none; color:var(--admin)" onclick="tab('ad', this)">⚡</button>
         <button class="tab-btn" onclick="tab('st', this)">⚙️</button>
     </div>
 
     <div id="up" class="section active">
-        <div class="row"><div>Сила<br><small id="p-lvl">Лвл 1</small></div><button class="action-btn" id="btn-p" onclick="buyP()">10</button></div>
-        <div class="row"><div>Rebirth (Max 100)<br><small id="r-lvl" style="color:var(--gold)">0</small></div><button class="action-btn" id="btn-r" onclick="doRebirth()">1M</button></div>
-        <button class="action-btn" id="btn-max" style="background:var(--purple); width: 100%;" onclick="buyMax()">КУПИТИ MAX СИЛУ</button>
+        <div class="row"><div>Сила<br><small id="p-lvl">Лвл 1</small></div><button class="action-btn" onclick="buyP()" id="btn-p">10</button></div>
+        <div class="row"><div>Rebirth (Max 100)<br><small id="r-lvl">0</small></div><button class="action-btn" onclick="doRebirth()" id="btn-r">1M</button></div>
     </div>
 
     <div id="th" class="section">
-        <div class="row"><span>🌌 Космос (x1.5)</span><button class="action-btn" id="btn-bg-space" onclick="buyTheme('bg-space', 5000, 'c')">5K</button></div>
-        <div class="row"><span>🇺🇦 Україна (x2)</span><button class="action-btn" id="btn-bg-ukraine" onclick="buyTheme('bg-ukraine', 15000, 'c')">15K</button></div>
-        <div class="row"><span>🌈 Неон (x15)</span><button class="action-btn" id="btn-bg-neon" onclick="buyTheme('bg-neon', 200, 'd')">200 💎</button></div>
-        <div class="row"><span>✨ Золото (x50)</span><button class="action-btn" id="btn-bg-gold" onclick="buyTheme('bg-gold', 1000, 'd')">1K 💎</button></div>
-        <div id="k-row" class="row" style="display:none; border:1px solid var(--gold)"><span>👑 KING (+999 Sx)</span><button class="action-btn" id="btn-bg-king" onclick="setT('bg-king')">ОБРАТИ</button></div>
+        <div class="row"><span>🌌 Космос (x1.5)</span><button class="action-btn" id="btn-th-bg-space" onclick="buyTheme('bg-space', 5000, 'c')">5K</button></div>
+        <div class="row"><span>🇺🇦 Україна (x2)</span><button class="action-btn" id="btn-th-bg-ukraine" onclick="buyTheme('bg-ukraine', 15000, 'c')">15K</button></div>
+        <div class="row"><span>🌈 Неон (x15)</span><button class="action-btn" id="btn-th-bg-neon" onclick="buyTheme('bg-neon', 300, 'd')">300 💎</button></div>
+        <div class="row"><span>✨ Золото (x50)</span><button class="action-btn" id="btn-th-bg-gold" onclick="buyTheme('bg-gold', 1000, 'd')">1K 💎</button></div>
+        <div class="row" id="k-th-row" style="display:none; border:1px solid gold;"><span>👑 KING (Max)</span><button class="action-btn" id="btn-th-bg-king" onclick="setT('bg-king')">ОБРАТИ</button></div>
         <div class="row"><span>🌑 Стандарт</span><button class="action-btn" onclick="setT('')">ОБРАТИ</button></div>
     </div>
 
+    <div id="sk" class="section">
+        <div class="row"><span>🐱 Котик (x2)</span><button class="action-btn" id="btn-sk-cat" onclick="buySkin('cat', 50)">50 💎</button></div>
+        <div class="row"><span>❤️ Серце (x5)</span><button class="action-btn" id="btn-sk-heart" onclick="buySkin('heart', 150)">150 💎</button></div>
+        <div class="row"><span>👽 Прибулець (x20)</span><button class="action-btn" id="btn-sk-alien" onclick="buySkin('alien', 500)">500 💎</button></div>
+        <div class="row"><span>🔥 Вогонь (x100)</span><button class="action-btn" id="btn-sk-fire" onclick="buySkin('fire', 1000)">1K 💎</button></div>
+        <div class="row" id="ua-sk-row" style="display:none; border:1px solid #0057b7"><span>🔱 ГЕРБ (x500)</span><button class="action-btn" id="btn-sk-ua" onclick="setSkin('ua')">ОБРАТИ</button></div>
+        <div class="row" id="king-sk-row" style="display:none; border:1px solid gold"><span>👑 KING (+Sx)</span><button class="action-btn" id="btn-sk-king" onclick="setSkin('king')">ОБРАТИ</button></div>
+        <div class="row"><span>🔵 Стандарт</span><button class="action-btn" onclick="setSkin('')">ОБРАТИ</button></div>
+    </div>
+
     <div id="cd" class="section">
-        <input type="text" id="promo" placeholder="Введіть код тут...">
-        <button class="action-btn" style="width:100%;" onclick="applyCode()">АКТИВУВАТИ</button>
+        <input type="text" id="promo" placeholder="Введіть код..." style="width:100%; padding:10px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:white; text-align:center;">
+        <button class="action-btn" style="width:100%; margin-top:10px;" onclick="applyCode()">АКТИВУВАТИ</button>
     </div>
 
     <div id="ad" class="section">
-        <button class="action-btn" style="background:var(--admin); width:100%" onclick="state.c += 1e21; u();">+100 Секстильйонів</button>
-        <button class="action-btn" style="background:var(--admin); width:100%; margin-top:5px;" onclick="state.rb = 100; state.p = 1e21; u();">Встановити Макс Ліміти</button>
-        <button class="action-btn" style="background:var(--admin); width:100%; margin-top:5px;" onclick="state.d += 1000000; u();">+1M Гемів</button>
+        <h3 style="margin:0; font-size:0.8rem; color:var(--admin)">ADMIN PANEL</h3>
+        <button class="action-btn" style="background:var(--admin); margin-top:5px;" onclick="state.c += 1e21; u();">+100 Секстильйонів</button>
+        <button class="action-btn" style="background:var(--admin); margin-top:5px;" onclick="state.d += 1000000; u();">+1M Гемів</button>
+        <button class="action-btn" style="background:var(--admin); margin-top:5px;" onclick="state.rb = 100; state.p = 1e21; u();">Макс Ліміти</button>
+        <button class="action-btn" style="background:var(--admin); margin-top:5px;" onclick="state.skins=['cat','heart','alien','fire','ua','king']; state.th.push('bg-king','bg-ukraine','bg-neon','bg-gold','bg-space'); u();">Відкрити ВСЕ</button>
     </div>
 
     <div id="st" class="section">
-        <button class="action-btn" style="background:var(--red); width:100%" onclick="hardReset()">ПОВНЕ СКИНУТИ ВСЕ</button>
+        <button class="action-btn" style="background:var(--red); width:100%" onclick="hardReset()">СКИНУТИ ПРОГРЕС</button>
     </div>
 </div>
 
 <script>
     let state = {
-        c: parseFloat(localStorage.getItem('c_v14')) || 0,
-        d: parseFloat(localStorage.getItem('d_v14')) || 0,
-        p: parseFloat(localStorage.getItem('p_v14')) || 1,
-        cs: parseFloat(localStorage.getItem('cs_v14')) || 10,
-        rb: parseInt(localStorage.getItem('rb_v14')) || 0,
-        th: JSON.parse(localStorage.getItem('th_v14')) || [],
-        ct: localStorage.getItem('ct_v14') || '',
-        admin: localStorage.getItem('admin_v14') === 'true'
+        c: parseFloat(localStorage.getItem('c_v19')) || 0,
+        d: parseFloat(localStorage.getItem('d_v19')) || 0,
+        p: parseFloat(localStorage.getItem('p_v19')) || 1,
+        cs: parseFloat(localStorage.getItem('cs_v19')) || 10,
+        rb: parseInt(localStorage.getItem('rb_v19')) || 0,
+        th: JSON.parse(localStorage.getItem('th_v19')) || [],
+        skins: JSON.parse(localStorage.getItem('skins_v19')) || [],
+        ct: localStorage.getItem('ct_v19') || '',
+        cs_skin: localStorage.getItem('cs_skin_v19') || '',
+        admin: localStorage.getItem('admin_v19') === 'true'
     };
 
-    const LIMIT_RB = 100;
-    const LIMIT_P = 1e21; // 1 Sextillion
-    const boosts = { 'bg-space': 1.5, 'bg-ukraine': 2, 'bg-neon': 15, 'bg-gold': 50, 'bg-king': 1 };
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(f, t, d) {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = t; o.frequency.setValueAtTime(f, ctx.currentTime);
+        o.connect(g); g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.05, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + d);
+        o.start(); o.stop(ctx.currentTime + d);
+    }
+
+    const sSounds = {
+        'cat': () => { playSound(800, 'sine', 0.2); setTimeout(()=>playSound(1200, 'sine', 0.2), 50); },
+        'heart': () => playSound(400, 'triangle', 0.3),
+        'alien': () => playSound(1500, 'sawtooth', 0.1),
+        'fire': () => playSound(200, 'square', 0.1),
+        'ua': () => playSound(523, 'sine', 0.3),
+        'king': () => playSound(1000, 'sine', 0.1),
+        '': () => playSound(600, 'sine', 0.1)
+    };
+
+    const thB = { 'bg-space': 1.5, 'bg-ukraine': 2, 'bg-neon': 15, 'bg-gold': 50, 'bg-king': 1, '': 1 };
+    const sB = { 'cat': 2, 'heart': 5, 'alien': 20, 'fire': 100, 'ua': 500, 'king': 1, '': 1 };
+    const sI = { 'cat': '🐱', 'heart': '❤️', 'alien': '👽', 'fire': '🔥', 'ua': '🔱', 'king': '👑', '': 'КЛІК' };
 
     function f(n) {
         if (n >= 1e21) return (n/1e21).toFixed(1) + "Sx";
         if (n >= 1e15) return (n/1e15).toFixed(1) + "Qd";
-        if (n >= 1e12) return (n/1e12).toFixed(1) + "T";
-        if (n >= 1e9) return (n/1e9).toFixed(1) + "B";
         if (n >= 1e6) return (n/1e6).toFixed(1) + "M";
         return Math.floor(n).toLocaleString();
     }
@@ -123,98 +154,87 @@
         document.getElementById('bal-c').innerText = f(state.c);
         document.getElementById('bal-d').innerText = f(state.d);
         
-        let m = Math.pow(2, state.rb) * (boosts[state.ct] || 1);
+        let m = Math.pow(2, state.rb) * sB[state.cs_skin] * (thB[state.ct] || 1);
         let inc = state.p * m;
-        if(state.ct === 'bg-king') inc += 999e21;
+        if(state.cs_skin === 'king' || state.ct === 'bg-king') inc += 999e21;
         document.getElementById('income-display').innerText = "Клік: +" + f(inc);
 
-        // Сила
-        document.getElementById('p-lvl').innerText = "Сила: " + f(state.p);
-        let btnP = document.getElementById('btn-p');
-        if(state.p >= LIMIT_P) { btnP.innerText = "MAX"; btnP.disabled = true; } 
-        else { btnP.innerText = f(state.cs); btnP.disabled = state.c < state.cs; }
+        document.getElementById('click-btn').innerText = sI[state.cs_skin];
+        document.getElementById('click-btn').className = state.cs_skin ? 'skin-' + state.cs_skin : '';
+        document.getElementById('main-bg').className = state.ct;
 
-        // Rebirth
-        document.getElementById('r-lvl').innerText = state.rb;
-        let btnR = document.getElementById('btn-r');
-        let rCost = 1e6 * Math.pow(10, state.rb);
-        if(state.rb >= LIMIT_RB) { btnR.innerText = "MAX"; btnR.disabled = true; }
-        else { btnR.innerText = f(rCost); btnR.disabled = state.c < rCost; }
-
-        // Оновлення фонів
-        ['bg-space', 'bg-ukraine', 'bg-neon', 'bg-gold', 'bg-king'].forEach(tid => {
-            let b = document.getElementById('btn-' + tid);
-            if(b && state.th.includes(tid)) {
-                b.innerText = "ОБРАТИ";
-                b.classList.add('btn-owned');
-            }
+        // Кнопки фонів та скінів
+        ['bg-space','bg-ukraine','bg-neon','bg-gold','bg-king'].forEach(t => {
+            let b = document.getElementById('btn-th-' + t);
+            if(b && state.th.includes(t)) { b.innerText = "ОБРАТИ"; b.classList.add('btn-owned'); }
+        });
+        ['cat','heart','alien','fire','ua','king'].forEach(s => {
+            let b = document.getElementById('btn-sk-' + s);
+            if(b && state.skins.includes(s)) { b.innerText = "ОБРАТИ"; b.classList.add('btn-owned'); }
         });
 
+        if(state.th.includes('bg-king')) document.getElementById('k-th-row').style.display = 'flex';
+        if(state.skins.includes('ua')) document.getElementById('ua-sk-row').style.display = 'flex';
+        if(state.skins.includes('king')) document.getElementById('king-sk-row').style.display = 'flex';
+        
         if(state.admin) {
             document.getElementById('admin-tab-btn').style.display = 'block';
             document.getElementById('tab-bar').classList.add('admin-active');
         }
 
-        document.getElementById('main-bg').className = state.ct;
-        if(state.th.includes('bg-king')) document.getElementById('k-row').style.display = 'flex';
+        document.getElementById('p-lvl').innerText = "Лвл " + f(state.p);
+        document.getElementById('btn-p').innerText = state.p >= 1e21 ? "MAX" : f(state.cs);
+        document.getElementById('r-lvl').innerText = state.rb;
 
-        // Save
-        localStorage.setItem('c_v14', state.c); localStorage.setItem('d_v14', state.d);
-        localStorage.setItem('p_v14', state.p); localStorage.setItem('cs_v14', state.cs);
-        localStorage.setItem('rb_v14', state.rb); localStorage.setItem('th_v14', JSON.stringify(state.th));
-        localStorage.setItem('ct_v14', state.ct); localStorage.setItem('admin_v14', state.admin);
+        localStorage.setItem('c_v19', state.c); localStorage.setItem('d_v19', state.d);
+        localStorage.setItem('p_v19', state.p); localStorage.setItem('cs_v19', state.cs);
+        localStorage.setItem('rb_v19', state.rb); localStorage.setItem('th_v19', JSON.stringify(state.th));
+        localStorage.setItem('skins_v19', JSON.stringify(state.skins)); localStorage.setItem('ct_v19', state.ct);
+        localStorage.setItem('cs_skin_v19', state.cs_skin); localStorage.setItem('admin_v19', state.admin);
     }
 
     function doClick() {
-        let m = Math.pow(2, state.rb) * (boosts[state.ct] || 1);
+        if(ctx.state === 'suspended') ctx.resume();
+        (sSounds[state.cs_skin] || sSounds[''])();
+        let m = Math.pow(2, state.rb) * sB[state.cs_skin] * (thB[state.ct] || 1);
         let gain = state.p * m;
-        if(state.ct === 'bg-king') gain += 999e21;
+        if(state.cs_skin === 'king' || state.ct === 'bg-king') gain += 999e21;
         state.c += gain; u();
     }
 
-    function buyP() {
-        if(state.c >= state.cs && state.p < LIMIT_P) {
-            state.c -= state.cs; state.p *= 1.6; state.cs *= 1.9;
-            if(state.p > LIMIT_P) state.p = LIMIT_P;
-            u();
-        }
-    }
-
-    function buyMax() {
-        for(let i=0; i<50; i++) { if(state.c >= state.cs && state.p < LIMIT_P) buyP(); else break; }
-    }
-
-    function doRebirth() {
-        let cost = 1e6 * Math.pow(10, state.rb);
-        if(state.c >= cost && state.rb < LIMIT_RB) {
-            state.rb++; state.c = 0; state.p = 1; state.cs = 10; state.d += 100; u();
-        }
-    }
-
-    function buyTheme(id, pr, ty) {
-        if(state.th.includes(id)) { state.ct = id; }
-        else {
-            if(ty === 'c' && state.c >= pr) { state.c -= pr; state.th.push(id); state.ct = id; }
-            else if(ty === 'd' && state.d >= pr) { state.d -= pr; state.th.push(id); state.ct = id; }
-        }
-        u();
-    }
-
     function applyCode() {
-        let val = document.getElementById('promo').value;
-        if(val === 'admin123') { state.admin = true; alert("Адмін-панель відчинена!"); }
-        if(val.toUpperCase() === 'KING') { state.th.push('bg-king'); state.ct = 'bg-king'; }
+        let val = document.getElementById('promo').value.toLowerCase();
+        if(val === 'admin123') { state.admin = true; alert("Адмін панель відкрита!"); }
+        if(val === 'ukraine') { state.skins.push('ua'); state.th.push('bg-ukraine'); state.cs_skin = 'ua'; state.ct = 'bg-ukraine'; }
+        if(val === 'king') { state.skins.push('king'); state.th.push('bg-king'); state.cs_skin = 'king'; state.ct = 'bg-king'; }
         document.getElementById('promo').value = ''; u();
     }
 
+    function buySkin(id, pr) {
+        if(state.skins.includes(id)) state.cs_skin = id;
+        else if(state.d >= pr) { state.d -= pr; state.skins.push(id); state.cs_skin = id; } u();
+    }
+    function buyTheme(id, pr, ty) {
+        if(state.th.includes(id)) state.ct = id;
+        else if((ty==='c' && state.c>=pr) || (ty==='d' && state.d>=pr)) {
+            if(ty==='c') state.c-=pr; else state.d-=pr;
+            state.th.push(id); state.ct = id;
+        } u();
+    }
+
+    function buyP() { if(state.c >= state.cs && state.p < 1e21) { state.c -= state.cs; state.p *= 1.6; state.cs *= 2; u(); } }
+    function doRebirth() { 
+        let cost = 1e6 * Math.pow(10, state.rb);
+        if(state.c >= cost && state.rb < 100) { state.rb++; state.c = 0; state.p = 1; state.cs = 10; state.d += 500; u(); }
+    }
     function setT(id) { state.ct = id; u(); }
+    function setSkin(id) { state.cs_skin = id; u(); }
     function tab(id, btn) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active'); btn.classList.add('active');
     }
-    function hardReset() { if(confirm("Видалити весь прогрес?")) { localStorage.clear(); location.reload(); } }
-
+    function hardReset() { if(confirm("Скинути?")) { localStorage.clear(); location.reload(); } }
     u();
 </script>
 </body>
