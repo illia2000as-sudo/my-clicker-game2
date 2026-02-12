@@ -3,181 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Clicker Game 2026</title>
+    <title>Clicker King: Boosted Themes</title>
     <style>
-        :root { --accent: #38bdf8; --bg: #0f172a; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root { --accent: #38bdf8; --bg: #0f172a; --gold: #f59e0b; --diamond: #00f2ff; --purple: #a855f7; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; }
         
         body {
-            font-family: sans-serif;
-            background: var(--bg);
-            background-size: cover;
-            background-position: center;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            transition: 0.5s;
+            background: var(--bg); background-size: cover; background-position: center;
+            color: white; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; transition: 0.8s;
         }
 
-        /* Фони магазину */
+        /* Фони */
         .bg-ukraine { background: linear-gradient(to bottom, #0057b7 50%, #ffd700 50%) !important; }
         .bg-space { background: radial-gradient(circle, #1e1b4b, #000) !important; }
+        .bg-king { background: linear-gradient(45deg, #f59e0b, #78350f, #facc15) !important; animation: shine 3s infinite alternate; }
+        .bg-neon { background: linear-gradient(135deg, #ff00ff, #00ffff) !important; }
+        .bg-gold { background: radial-gradient(circle, #fff7ad, #ffa200) !important; }
+        .bg-sakura { background: linear-gradient(to bottom, #ff9a9e, #fad0c4) !important; }
+
+        @keyframes shine { from { filter: brightness(1); } to { filter: brightness(1.3); } }
 
         .card {
-            background: rgba(30, 41, 59, 0.95);
-            padding: 20px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 360px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: rgba(15, 23, 42, 0.95); padding: 20px; border-radius: 24px;
+            width: 95%; max-width: 400px; text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
         }
 
-        #balance { font-size: 2.8rem; font-weight: bold; color: var(--accent); margin: 10px 0; display: block; }
+        .currencies { display: flex; justify-content: space-around; margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 15px; }
+        .cur-item { display: flex; flex-direction: column; }
+        .cur-val { font-weight: 900; font-size: 1.1rem; }
+        #balance { color: var(--accent); }
+        #diamonds { color: var(--diamond); }
+
+        #boost-status { font-size: 0.75rem; color: #4ade80; height: 15px; margin-bottom: 5px; font-weight: bold; }
         
         #click-btn {
-            width: 140px; height: 140px;
-            border-radius: 50%; border: none;
-            background: #38bdf8; color: white;
-            font-size: 1.2rem; font-weight: bold;
-            cursor: pointer; margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(56,189,248,0.4);
+            width: 100px; height: 100px; border-radius: 50%; border: none;
+            background: var(--accent); color: white; font-size: 1rem; font-weight: bold;
+            cursor: pointer; margin-bottom: 15px; box-shadow: 0 8px 20px rgba(56,189,248,0.4);
         }
         #click-btn:active { transform: scale(0.9); }
 
-        .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 8px; border: none; border-radius: 8px; background: #334155; color: white; cursor: pointer; font-size: 11px; }
+        .tabs { display: flex; gap: 3px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 10px 2px; border: none; border-radius: 8px; background: #334155; color: white; cursor: pointer; font-size: 8px; text-transform: uppercase; font-weight: bold; }
         .tab-btn.active { background: var(--accent); }
 
         .section { display: none; flex-direction: column; gap: 8px; }
         .section.active { display: flex; }
 
-        .row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; }
-        .action-btn { background: #22c55e; border: none; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .action-btn:disabled { background: #475569; }
-
-        input { padding: 10px; border-radius: 8px; border: none; width: 100%; margin-bottom: 5px; }
+        .row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; }
+        .action-btn { background: #22c55e; border: none; color: white; padding: 8px 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
+        .action-btn:disabled { background: #475569; opacity: 0.5; }
         
-        #admin-panel { display: none; background: #ef4444; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 12px; }
+        .theme-info { font-size: 0.65rem; color: var(--gold); display: block; }
+
+        .exchange-box { background: rgba(0, 242, 255, 0.05); border: 1px solid rgba(0, 242, 255, 0.2); padding: 10px; border-radius: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .all-btn { background: var(--purple); color: white; width: 100%; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.75rem; }
+
+        input { padding: 12px; border-radius: 10px; border: 2px solid #334155; width: 100%; margin-bottom: 10px; background: #0f172a; color: white; text-align: center; }
+        #admin-panel { display: none; background: #ef4444; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 11px; }
     </style>
 </head>
 <body id="b">
 
 <div class="card">
     <div id="admin-panel">
-        АДМІН: <button onclick="coins+=1000000; u()">+1М 💰</button>
-        <button onclick="localStorage.clear(); location.reload()">Скидання</button>
+        <button onclick="coins+=1e24; u()">+1Sx</button> 
+        <button onclick="diams+=1000; u()">+1K 💎</button>
     </div>
 
-    <span id="balance">0</span>
+    <div class="currencies">
+        <div class="cur-item"><span style="font-size:0.55rem; opacity:0.7;">МОНЕТИ</span><span id="balance" class="cur-val">0</span></div>
+        <div class="cur-item"><span style="font-size:0.55rem; opacity:0.7;">ДІАМАНТИ</span><span id="diamonds" class="cur-val">0</span></div>
+    </div>
+
+    <div id="boost-status">Буст: x1</div>
     <button id="click-btn" onclick="doClick()">КЛІК!</button>
 
     <div class="tabs">
         <button class="tab-btn active" id="t1" onclick="tab('upg')">Прокачка</button>
-        <button class="tab-btn" id="t2" onclick="tab('shop')">Фони</button>
-        <button class="tab-btn" id="t3" onclick="tab('promo')">Промокоди</button>
+        <button class="tab-btn" id="t2" onclick="tab('reb')">Rebirth</button>
+        <button class="tab-btn" id="t3" onclick="tab('shop')">Фони</button>
+        <button class="tab-btn" id="t4" onclick="tab('promo')">Коди</button>
     </div>
 
     <div id="upg" class="section active">
         <div class="row">
-            <span>Клік +<span id="p-v">1</span></span>
-            <button class="action-btn" id="b-p" onclick="buyP()">Ціна: <span id="p-c">10</span></button>
+            <span style="font-size:0.8rem;">Сила: +<span id="p-v">1</span></span>
+            <div style="display:flex; gap:3px;">
+                <button class="action-btn" onclick="buyP()">+1</button>
+                <button class="action-btn" style="background:var(--purple)" onclick="buyMax()">MAX</button>
+            </div>
         </div>
+        <div class="row"><span>Автоклікер</span><button class="action-btn" id="b-a" onclick="buyA()">2500</button></div>
+    </div>
+
+    <div id="reb" class="section">
         <div class="row">
-            <span>Автоклікер</span>
-            <button class="action-btn" id="b-a" onclick="buyA()">2500</button>
+            <span>Rebirth (x<span id="r-mult">1</span>)</span>
+            <button class="action-btn" id="b-r" onclick="doRebirth()" style="background:var(--gold)">1M</button>
         </div>
     </div>
 
     <div id="shop" class="section">
-        <div class="row">
-            <span>🇺🇦 Україна</span>
-            <button class="action-btn" id="s1" onclick="buyTheme('bg-ukraine', 15000)">15,000</button>
+        <div class="exchange-box">
+            <button class="all-btn" onclick="exchangeAll()">ОБМІНЯТИ ВСЕ (1B ➔ 10 💎)</button>
         </div>
-        <div class="row">
-            <span>🌌 Космос</span>
-            <button class="action-btn" id="s2" onclick="buyTheme('bg-space', 5000)">5,000</button>
+        <div style="overflow-y: auto; max-height: 200px; display: flex; flex-direction: column; gap: 5px; padding-right: 5px;">
+            <div class="row"><div>🌌 Космос<span class="theme-info">Буст: x1.5</span></div><button class="action-btn" id="s-space" onclick="buyTheme('bg-space', 5000, 'coins')">5K 💰</button></div>
+            <div class="row"><div>🇺🇦 Україна<span class="theme-info">Буст: x2.0</span></div><button class="action-btn" id="s-ukr" onclick="buyTheme('bg-ukraine', 15000, 'coins')">15K 💰</button></div>
+            <div class="row"><div>💖 Сакура<span class="theme-info">Буст: x5.0</span></div><button class="action-btn" id="s-sakura" onclick="buyTheme('bg-sakura', 50, 'diams')">50 💎</button></div>
+            <div class="row"><div>🌈 Неон<span class="theme-info">Буст: x15.0</span></div><button class="action-btn" id="s-neon" onclick="buyTheme('bg-neon', 150, 'diams')">150 💎</button></div>
+            <div class="row"><div>✨ Золото<span class="theme-info">Буст: x50.0</span></div><button class="action-btn" id="s-gold" onclick="buyTheme('bg-gold', 500, 'diams')">500 💎</button></div>
+            
+            <div id="k-row" class="row" style="display:none; border: 1px solid var(--gold);">
+                <div>👑 KING BOOST<span class="theme-info">+999 Sx КЛІК</span></div><button class="action-btn" onclick="setTheme('bg-king')" style="background:var(--gold)">ОБРАТИ</button>
+            </div>
+            <div class="row"><span>🌑 Стандарт</span><button class="action-btn" onclick="setTheme('')">ОБРАТИ</button></div>
         </div>
     </div>
 
     <div id="promo" class="section">
-        <input type="text" id="p-input" placeholder="Введіть код тут...">
-        <button class="action-btn" style="width:100%" onclick="usePromo()">Активувати</button>
+        <input type="text" id="p-input" placeholder="Введіть код...">
+        <button class="action-btn" style="width:100%" onclick="usePromo()">АКТИВУВАТИ</button>
     </div>
 </div>
 
 <script>
     let coins = parseFloat(localStorage.getItem('c')) || 0;
+    let diams = parseInt(localStorage.getItem('d')) || 0;
     let power = parseInt(localStorage.getItem('p')) || 1;
     let cost = parseInt(localStorage.getItem('cs')) || 10;
     let auto = localStorage.getItem('a') === 'true';
+    let rebirths = parseInt(localStorage.getItem('rb')) || 0;
     let themes = JSON.parse(localStorage.getItem('th')) || [];
     let curTh = localStorage.getItem('ct') || '';
 
-    function u() {
-        document.getElementById('balance').innerText = Math.floor(coins).toLocaleString();
-        document.getElementById('p-v').innerText = power;
-        document.getElementById('p-c').innerText = cost;
-        document.getElementById('b-p').disabled = coins < cost;
-        
-        let ba = document.getElementById('b-a');
-        if(auto) { ba.innerText = "Є"; ba.disabled = true; } else { ba.disabled = coins < 2500; }
+    const KING_BOOST = 999e21; // 999 Sx
 
-        if(themes.includes('bg-ukraine')) document.getElementById('s1').innerText = "Обрати";
-        if(themes.includes('bg-space')) document.getElementById('s2').innerText = "Обрати";
+    // Карта бустів
+    const themeBoosts = {
+        'bg-space': 1.5,
+        'bg-ukraine': 2,
+        'bg-sakura': 5,
+        'bg-neon': 15,
+        'bg-gold': 50,
+        'bg-king': 1 // Для Кінга окрема логіка (фікс буст)
+    };
+
+    function u() {
+        const f = (n) => {
+            if (n >= 1e21) return (n/1e21).toFixed(1) + "Sx";
+            if (n >= 1e15) return (n/1e15).toFixed(1) + "Q";
+            if (n >= 1e12) return (n/1e12).toFixed(1) + "T";
+            if (n >= 1e9) return (n/1e9).toFixed(1) + "B";
+            if (n >= 1e6) return (n/1e6).toFixed(1) + "M";
+            return Math.floor(n).toLocaleString();
+        };
+
+        document.getElementById('balance').innerText = f(coins);
+        document.getElementById('diamonds').innerText = diams.toLocaleString();
+        document.getElementById('p-v').innerText = power.toLocaleString();
         
+        let mult = Math.pow(2, rebirths);
+        let rCost = 1000000 * Math.pow(10, rebirths);
+        document.getElementById('b-r').innerText = f(rCost);
+        document.getElementById('b-r').disabled = coins < rCost;
+
+        // Оновлення тексту бусту
+        let currentThemeMult = themeBoosts[curTh] || 1;
+        if(curTh === 'bg-king') {
+            document.getElementById('boost-status').innerText = "👑 KING: +999 Sx / клік";
+        } else {
+            document.getElementById('boost-status').innerText = `Буст фону: x${currentThemeMult} | Rebirth: x${mult}`;
+        }
+
+        const updateBtn = (id, theme, price, type) => {
+            let el = document.getElementById(id); if(!el) return;
+            if(themes.includes(theme)) el.innerText = "ОБРАТИ";
+            else el.disabled = (type === 'coins' ? coins < price : diams < price);
+        };
+        updateBtn('s-space', 'bg-space', 5000, 'coins');
+        updateBtn('s-ukr', 'bg-ukraine', 15000, 'coins');
+        updateBtn('s-sakura', 'bg-sakura', 50, 'diams');
+        updateBtn('s-neon', 'bg-neon', 150, 'diams');
+        updateBtn('s-gold', 'bg-gold', 500, 'diams');
+
+        if(themes.includes('bg-king')) document.getElementById('k-row').style.display = 'flex';
         document.getElementById('b').className = curTh;
 
-        localStorage.setItem('c', coins);
-        localStorage.setItem('p', power);
-        localStorage.setItem('cs', cost);
-        localStorage.setItem('a', auto);
-        localStorage.setItem('th', JSON.stringify(themes));
-        localStorage.setItem('ct', curTh);
+        localStorage.setItem('c', coins); localStorage.setItem('d', diams);
+        localStorage.setItem('p', power); localStorage.setItem('cs', cost);
+        localStorage.setItem('a', auto); localStorage.setItem('rb', rebirths);
+        localStorage.setItem('th', JSON.stringify(themes)); localStorage.setItem('ct', curTh);
     }
 
-    function doClick() { coins += power; u(); }
+    function doClick() {
+        let basePower = power * Math.pow(2, rebirths);
+        let themeMult = themeBoosts[curTh] || 1;
+        
+        let finalPower = basePower * themeMult;
+        if(curTh === 'bg-king') finalPower += KING_BOOST;
+        
+        coins += finalPower; u();
+    }
     
-    function buyP() { if(coins >= cost) { coins -= cost; power++; cost = Math.round(cost * 1.6); u(); } }
-    
-    function buyA() { if(coins >= 2500 && !auto) { coins -= 2500; auto = true; u(); } }
+    function exchangeAll() {
+        if(coins < 1e9) return;
+        let billions = Math.floor(coins / 1e9);
+        coins -= billions * 1e9; diams += billions * 10; u();
+    }
 
-    function buyTheme(t, p) {
-        if(themes.includes(t)) { curTh = t; }
-        else if(coins >= p) { coins -= p; themes.push(t); curTh = t; }
+    function buyP() { if(coins >= cost) { coins -= cost; power++; cost = Math.round(cost * 1.6); u(); } }
+    function buyMax() {
+        let count = 0;
+        while (coins >= cost && count < 200) { coins -= cost; power++; cost = Math.round(cost * 1.6); count++; }
         u();
     }
+    function buyA() { if(coins >= 2500 && !auto) { coins -= 2500; auto = true; u(); } }
+
+    function doRebirth() {
+        let rc = 1000000 * Math.pow(10, rebirths);
+        if(coins >= rc) { rebirths++; coins = 0; power = 1; cost = 10; auto = false; diams += 5; u(); }
+    }
+
+    function buyTheme(t, p, type) {
+        if(themes.includes(t)) curTh = t;
+        else {
+            if(type === 'coins' && coins >= p) { coins -= p; themes.push(t); curTh = t; }
+            else if(type === 'diams' && diams >= p) { diams -= p; themes.push(t); curTh = t; }
+        }
+        u();
+    }
+    function setTheme(t) { curTh = t; u(); }
 
     function tab(id) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'upg') document.getElementById('t1').classList.add('active');
-        if(id === 'shop') document.getElementById('t2').classList.add('active');
-        if(id === 'promo') document.getElementById('t3').classList.add('active');
+        const m = {'upg':'t1','reb':'t2','shop':'t3','promo':'t4'};
+        document.getElementById(m[id]).classList.add('active');
     }
 
     function usePromo() {
-        let val = document.getElementById('p-input').value.trim().toLowerCase();
-        if(val === 'admin123') {
-            document.getElementById('admin-panel').style.display = 'block';
-            alert('Адмін активований!');
-        } else if(val === 'ukraine') {
-            coins += 5000;
-            alert('+5000 монет!');
-        } else {
-            alert('Невірний код');
-        }
-        document.getElementById('p-input').value = '';
-        u();
+        let val = document.getElementById('p-input').value.trim().toUpperCase();
+        if(val === 'KING') {
+            if(!themes.includes('bg-king')) themes.push('bg-king');
+            curTh = 'bg-king'; coins += 1e15; u();
+        } else if(val === 'ADMIN123') { document.getElementById('admin-panel').style.display = 'block'; }
+        document.getElementById('p-input').value = ''; u();
     }
 
-    setInterval(() => { if(auto) { coins += power/2; u(); } }, 1000);
+    setInterval(() => { 
+        if(auto) { 
+            let p = (power * Math.pow(2, rebirths)) / 2;
+            let mult = themeBoosts[curTh] || 1;
+            let finalP = p * mult;
+            if(curTh === 'bg-king') finalP += (KING_BOOST/2);
+            coins += finalP; u(); 
+        } 
+    }, 1000);
     u();
 </script>
-
 </body>
 </html>
