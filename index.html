@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Clicker King: Boosted Themes</title>
+    <title>Clicker King: Classic Prices</title>
     <style>
         :root { --accent: #38bdf8; --bg: #0f172a; --gold: #f59e0b; --diamond: #00f2ff; --purple: #a855f7; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; }
@@ -37,14 +37,14 @@
         #balance { color: var(--accent); }
         #diamonds { color: var(--diamond); }
 
-        #boost-status { font-size: 0.75rem; color: #4ade80; height: 15px; margin-bottom: 5px; font-weight: bold; }
+        #boost-status { font-size: 0.7rem; color: #4ade80; height: 30px; margin-bottom: 5px; font-weight: bold; display: flex; align-items: center; justify-content: center; flex-direction: column; }
         
         #click-btn {
             width: 100px; height: 100px; border-radius: 50%; border: none;
             background: var(--accent); color: white; font-size: 1rem; font-weight: bold;
             cursor: pointer; margin-bottom: 15px; box-shadow: 0 8px 20px rgba(56,189,248,0.4);
         }
-        #click-btn:active { transform: scale(0.9); }
+        #click-btn:active { transform: scale(0.95); }
 
         .tabs { display: flex; gap: 3px; margin-bottom: 15px; }
         .tab-btn { flex: 1; padding: 10px 2px; border: none; border-radius: 8px; background: #334155; color: white; cursor: pointer; font-size: 8px; text-transform: uppercase; font-weight: bold; }
@@ -54,13 +54,10 @@
         .section.active { display: flex; }
 
         .row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; }
-        .action-btn { background: #22c55e; border: none; color: white; padding: 8px 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
+        .action-btn { background: #22c55e; border: none; color: white; padding: 8px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.75rem; }
         .action-btn:disabled { background: #475569; opacity: 0.5; }
         
-        .theme-info { font-size: 0.65rem; color: var(--gold); display: block; }
-
-        .exchange-box { background: rgba(0, 242, 255, 0.05); border: 1px solid rgba(0, 242, 255, 0.2); padding: 10px; border-radius: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px; }
-        .all-btn { background: var(--purple); color: white; width: 100%; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.75rem; }
+        .all-btn { background: var(--purple); color: white; width: 100%; border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 5px; }
 
         input { padding: 12px; border-radius: 10px; border: 2px solid #334155; width: 100%; margin-bottom: 10px; background: #0f172a; color: white; text-align: center; }
         #admin-panel { display: none; background: #ef4444; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 11px; }
@@ -79,7 +76,7 @@
         <div class="cur-item"><span style="font-size:0.55rem; opacity:0.7;">ДІАМАНТИ</span><span id="diamonds" class="cur-val">0</span></div>
     </div>
 
-    <div id="boost-status">Буст: x1</div>
+    <div id="boost-status">Завантаження...</div>
     <button id="click-btn" onclick="doClick()">КЛІК!</button>
 
     <div class="tabs">
@@ -91,35 +88,38 @@
 
     <div id="upg" class="section active">
         <div class="row">
-            <span style="font-size:0.8rem;">Сила: +<span id="p-v">1</span></span>
-            <div style="display:flex; gap:3px;">
-                <button class="action-btn" onclick="buyP()">+1</button>
-                <button class="action-btn" style="background:var(--purple)" onclick="buyMax()">MAX</button>
+            <span style="font-size:0.85rem;">Сила: +<span id="p-v">1</span></span>
+            <div style="display:flex; gap:5px;">
+                <button class="action-btn" id="btn-buy-1" onclick="buyP()">Купити: 10</button>
+                <button class="action-btn" id="btn-buy-max" style="background:var(--purple)" onclick="buyMax()">MAX</button>
             </div>
         </div>
-        <div class="row"><span>Автоклікер</span><button class="action-btn" id="b-a" onclick="buyA()">2500</button></div>
+        <div class="row">
+            <span>Автоклікер</span>
+            <button class="action-btn" id="b-a" onclick="buyA()">2,500</button>
+        </div>
     </div>
 
     <div id="reb" class="section">
         <div class="row">
-            <span>Rebirth (x<span id="r-mult">1</span>)</span>
-            <button class="action-btn" id="b-r" onclick="doRebirth()" style="background:var(--gold)">1M</button>
+            <div style="text-align: left;">
+                <span style="display:block; font-size:0.8rem;">Рівень: <span id="r-count">0</span></span>
+                <span style="font-size:0.65rem; color:var(--gold);">Множник: x<span id="r-mult">1</span></span>
+            </div>
+            <button class="action-btn" id="b-r" onclick="doRebirth()" style="background:var(--gold)">Ціна: 1M</button>
         </div>
     </div>
 
     <div id="shop" class="section">
-        <div class="exchange-box">
-            <button class="all-btn" onclick="exchangeAll()">ОБМІНЯТИ ВСЕ (1B ➔ 10 💎)</button>
-        </div>
-        <div style="overflow-y: auto; max-height: 200px; display: flex; flex-direction: column; gap: 5px; padding-right: 5px;">
-            <div class="row"><div>🌌 Космос<span class="theme-info">Буст: x1.5</span></div><button class="action-btn" id="s-space" onclick="buyTheme('bg-space', 5000, 'coins')">5K 💰</button></div>
-            <div class="row"><div>🇺🇦 Україна<span class="theme-info">Буст: x2.0</span></div><button class="action-btn" id="s-ukr" onclick="buyTheme('bg-ukraine', 15000, 'coins')">15K 💰</button></div>
-            <div class="row"><div>💖 Сакура<span class="theme-info">Буст: x5.0</span></div><button class="action-btn" id="s-sakura" onclick="buyTheme('bg-sakura', 50, 'diams')">50 💎</button></div>
-            <div class="row"><div>🌈 Неон<span class="theme-info">Буст: x15.0</span></div><button class="action-btn" id="s-neon" onclick="buyTheme('bg-neon', 150, 'diams')">150 💎</button></div>
-            <div class="row"><div>✨ Золото<span class="theme-info">Буст: x50.0</span></div><button class="action-btn" id="s-gold" onclick="buyTheme('bg-gold', 500, 'diams')">500 💎</button></div>
-            
+        <button class="all-btn" onclick="exchangeAll()">ОБМІНЯТИ ВСЕ (1B ➔ 10 💎)</button>
+        <div style="overflow-y: auto; max-height: 180px; display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
+            <div class="row"><div>🌌 Космос<span style="font-size:0.6rem; color:var(--gold); display:block;">Буст: x1.5</span></div><button class="action-btn" id="s-space" onclick="buyTheme('bg-space', 5000, 'coins')">5K</button></div>
+            <div class="row"><div>🇺🇦 Україна<span style="font-size:0.6rem; color:var(--gold); display:block;">Буст: x2.0</span></div><button class="action-btn" id="s-ukr" onclick="buyTheme('bg-ukraine', 15000, 'coins')">15K</button></div>
+            <div class="row"><div>💖 Сакура<span style="font-size:0.6rem; color:var(--gold); display:block;">Буст: x5.0</span></div><button class="action-btn" id="s-sakura" onclick="buyTheme('bg-sakura', 50, 'diams')">50 💎</button></div>
+            <div class="row"><div>🌈 Неон<span style="font-size:0.6rem; color:var(--gold); display:block;">Буст: x15.0</span></div><button class="action-btn" id="s-neon" onclick="buyTheme('bg-neon', 150, 'diams')">150 💎</button></div>
+            <div class="row"><div>✨ Золото<span style="font-size:0.6rem; color:var(--gold); display:block;">Буст: x50.0</span></div><button class="action-btn" id="s-gold" onclick="buyTheme('bg-gold', 500, 'diams')">500 💎</button></div>
             <div id="k-row" class="row" style="display:none; border: 1px solid var(--gold);">
-                <div>👑 KING BOOST<span class="theme-info">+999 Sx КЛІК</span></div><button class="action-btn" onclick="setTheme('bg-king')" style="background:var(--gold)">ОБРАТИ</button>
+                <div>👑 KING BOOST<span style="font-size:0.6rem; color:var(--gold); display:block;">+999 Sx КЛІК</span></div><button class="action-btn" onclick="setTheme('bg-king')" style="background:var(--gold)">ОБРАТИ</button>
             </div>
             <div class="row"><span>🌑 Стандарт</span><button class="action-btn" onclick="setTheme('')">ОБРАТИ</button></div>
         </div>
@@ -141,55 +141,56 @@
     let themes = JSON.parse(localStorage.getItem('th')) || [];
     let curTh = localStorage.getItem('ct') || '';
 
-    const KING_BOOST = 999e21; // 999 Sx
+    const KING_BOOST = 999e21;
+    const themeBoosts = { 'bg-space': 1.5, 'bg-ukraine': 2, 'bg-sakura': 5, 'bg-neon': 15, 'bg-gold': 50, 'bg-king': 1 };
 
-    // Карта бустів
-    const themeBoosts = {
-        'bg-space': 1.5,
-        'bg-ukraine': 2,
-        'bg-sakura': 5,
-        'bg-neon': 15,
-        'bg-gold': 50,
-        'bg-king': 1 // Для Кінга окрема логіка (фікс буст)
-    };
+    function f(n) {
+        if (n >= 1e21) return (n/1e21).toFixed(1) + "Sx";
+        if (n >= 1e15) return (n/1e15).toFixed(1) + "Q";
+        if (n >= 1e12) return (n/1e12).toFixed(1) + "T";
+        if (n >= 1e9) return (n/1e9).toFixed(1) + "B";
+        if (n >= 1e6) return (n/1e6).toFixed(1) + "M";
+        return Math.floor(n).toLocaleString();
+    }
 
     function u() {
-        const f = (n) => {
-            if (n >= 1e21) return (n/1e21).toFixed(1) + "Sx";
-            if (n >= 1e15) return (n/1e15).toFixed(1) + "Q";
-            if (n >= 1e12) return (n/1e12).toFixed(1) + "T";
-            if (n >= 1e9) return (n/1e9).toFixed(1) + "B";
-            if (n >= 1e6) return (n/1e6).toFixed(1) + "M";
-            return Math.floor(n).toLocaleString();
-        };
-
         document.getElementById('balance').innerText = f(coins);
         document.getElementById('diamonds').innerText = diams.toLocaleString();
         document.getElementById('p-v').innerText = power.toLocaleString();
         
-        let mult = Math.pow(2, rebirths);
+        // Ціна сили на кнопку
+        let btnBuy1 = document.getElementById('btn-buy-1');
+        btnBuy1.innerText = "Ціна: " + f(cost);
+        btnBuy1.disabled = coins < cost;
+        document.getElementById('btn-buy-max').disabled = coins < cost;
+
+        // Rebirth
+        let rMult = Math.pow(2, rebirths);
         let rCost = 1000000 * Math.pow(10, rebirths);
-        document.getElementById('b-r').innerText = f(rCost);
+        document.getElementById('r-count').innerText = rebirths;
+        document.getElementById('r-mult').innerText = rMult;
+        document.getElementById('b-r').innerText = "Ціна: " + f(rCost);
         document.getElementById('b-r').disabled = coins < rCost;
 
-        // Оновлення тексту бусту
-        let currentThemeMult = themeBoosts[curTh] || 1;
+        // Статус
+        let tMult = themeBoosts[curTh] || 1;
         if(curTh === 'bg-king') {
-            document.getElementById('boost-status').innerText = "👑 KING: +999 Sx / клік";
+            document.getElementById('boost-status').innerHTML = `<span>👑 KING ACTIVE</span><span>+999 Sx до кліку</span>`;
         } else {
-            document.getElementById('boost-status').innerText = `Буст фону: x${currentThemeMult} | Rebirth: x${mult}`;
+            document.getElementById('boost-status').innerHTML = `<span>Фон: x${tMult} | Rebirth: x${rMult}</span><span>Разом: x${(tMult * rMult).toFixed(1)}</span>`;
         }
 
-        const updateBtn = (id, theme, price, type) => {
+        // Кнопки фонів
+        const upd = (id, th, pr, ty) => {
             let el = document.getElementById(id); if(!el) return;
-            if(themes.includes(theme)) el.innerText = "ОБРАТИ";
-            else el.disabled = (type === 'coins' ? coins < price : diams < price);
+            if(themes.includes(th)) el.innerText = "ОБРАТИ";
+            else { el.innerText = f(pr) + (ty === 'coins' ? "" : " 💎"); el.disabled = (ty === 'coins' ? coins < pr : diams < pr); }
         };
-        updateBtn('s-space', 'bg-space', 5000, 'coins');
-        updateBtn('s-ukr', 'bg-ukraine', 15000, 'coins');
-        updateBtn('s-sakura', 'bg-sakura', 50, 'diams');
-        updateBtn('s-neon', 'bg-neon', 150, 'diams');
-        updateBtn('s-gold', 'bg-gold', 500, 'diams');
+        upd('s-space', 'bg-space', 5000, 'coins');
+        upd('s-ukr', 'bg-ukraine', 15000, 'coins');
+        upd('s-sakura', 'bg-sakura', 50, 'diams');
+        upd('s-neon', 'bg-neon', 150, 'diams');
+        upd('s-gold', 'bg-gold', 500, 'diams');
 
         if(themes.includes('bg-king')) document.getElementById('k-row').style.display = 'flex';
         document.getElementById('b').className = curTh;
@@ -201,13 +202,9 @@
     }
 
     function doClick() {
-        let basePower = power * Math.pow(2, rebirths);
-        let themeMult = themeBoosts[curTh] || 1;
-        
-        let finalPower = basePower * themeMult;
-        if(curTh === 'bg-king') finalPower += KING_BOOST;
-        
-        coins += finalPower; u();
+        let totalP = (power * Math.pow(2, rebirths)) * (themeBoosts[curTh] || 1);
+        if(curTh === 'bg-king') totalP += KING_BOOST;
+        coins += totalP; u();
     }
     
     function exchangeAll() {
@@ -217,16 +214,21 @@
     }
 
     function buyP() { if(coins >= cost) { coins -= cost; power++; cost = Math.round(cost * 1.6); u(); } }
+    
     function buyMax() {
         let count = 0;
-        while (coins >= cost && count < 200) { coins -= cost; power++; cost = Math.round(cost * 1.6); count++; }
+        while (coins >= cost && count < 250) { 
+            coins -= cost; power++; cost = Math.round(cost * 1.6); count++; 
+        }
         u();
     }
-    function buyA() { if(coins >= 2500 && !auto) { coins -= 2500; auto = true; u(); } }
 
     function doRebirth() {
         let rc = 1000000 * Math.pow(10, rebirths);
-        if(coins >= rc) { rebirths++; coins = 0; power = 1; cost = 10; auto = false; diams += 5; u(); }
+        if(coins >= rc) {
+            rebirths++; coins = 0; power = 1; cost = 10; auto = false; diams += 5;
+            u();
+        }
     }
 
     function buyTheme(t, p, type) {
@@ -237,6 +239,7 @@
         }
         u();
     }
+
     function setTheme(t) { curTh = t; u(); }
 
     function tab(id) {
@@ -251,18 +254,18 @@
         let val = document.getElementById('p-input').value.trim().toUpperCase();
         if(val === 'KING') {
             if(!themes.includes('bg-king')) themes.push('bg-king');
-            curTh = 'bg-king'; coins += 1e15; u();
+            curTh = 'bg-king'; coins += 1e18; u();
         } else if(val === 'ADMIN123') { document.getElementById('admin-panel').style.display = 'block'; }
         document.getElementById('p-input').value = ''; u();
     }
 
+    function buyA() { if(coins >= 2500 && !auto) { coins -= 2500; auto = true; u(); } }
+
     setInterval(() => { 
         if(auto) { 
-            let p = (power * Math.pow(2, rebirths)) / 2;
-            let mult = themeBoosts[curTh] || 1;
-            let finalP = p * mult;
-            if(curTh === 'bg-king') finalP += (KING_BOOST/2);
-            coins += finalP; u(); 
+            let p = ((power * Math.pow(2, rebirths)) * (themeBoosts[curTh] || 1)) / 2;
+            if(curTh === 'bg-king') p += (KING_BOOST/2);
+            coins += p; u(); 
         } 
     }, 1000);
     u();
