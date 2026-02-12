@@ -3,214 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Clicker & Shop</title>
+    <title>Clicker Game 2026</title>
     <style>
-        :root {
-            --panel-bg: rgba(30, 41, 59, 0.9);
-            --accent: #38bdf8;
-        }
-
+        :root { --accent: #38bdf8; --bg: #0f172a; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #0f172a; /* Стандартний фон */
+            font-family: sans-serif;
+            background: var(--bg);
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             color: white;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
             margin: 0;
-            transition: background 0.5s ease;
+            transition: 0.5s;
         }
 
-        /* Стилі фонів */
+        /* Фони магазину */
         .bg-ukraine { background: linear-gradient(to bottom, #0057b7 50%, #ffd700 50%) !important; }
-        .bg-dark { background: #0f172a !important; }
-        .bg-space { background: linear-gradient(45deg, #1e1b4b, #312e81) !important; }
+        .bg-space { background: radial-gradient(circle, #1e1b4b, #000) !important; }
 
-        .game-card {
-            background: var(--panel-bg);
-            padding: 25px;
-            border-radius: 24px;
-            text-align: center;
+        .card {
+            background: rgba(30, 41, 59, 0.95);
+            padding: 20px;
+            border-radius: 20px;
             width: 90%;
-            max-width: 350px;
-            backdrop-filter: blur(10px);
+            max-width: 360px;
+            text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        #balance {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--accent);
-            cursor: pointer; /* Натяк, що сюди можна натиснути */
-        }
-
+        #balance { font-size: 2.8rem; font-weight: bold; color: var(--accent); margin: 10px 0; display: block; }
+        
         #click-btn {
             width: 140px; height: 140px;
-            border-radius: 50%;
-            border: none;
-            background: radial-gradient(circle, #38bdf8, #0284c7);
-            margin: 20px 0;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            border-radius: 50%; border: none;
+            background: #38bdf8; color: white;
+            font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(56,189,248,0.4);
         }
+        #click-btn:active { transform: scale(0.9); }
 
-        .tabs { display: flex; gap: 10px; margin-top: 20px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; background: #334155; color: white; cursor: pointer; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 8px; border: none; border-radius: 8px; background: #334155; color: white; cursor: pointer; font-size: 11px; }
         .tab-btn.active { background: var(--accent); }
 
-        .content-section { display: none; margin-top: 15px; flex-direction: column; gap: 8px; }
-        .content-section.active { display: flex; }
+        .section { display: none; flex-direction: column; gap: 8px; }
+        .section.active { display: flex; }
 
-        .item {
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.05);
-            padding: 10px; border-radius: 10px; font-size: 0.9rem;
-        }
+        .row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; }
+        .action-btn { background: #22c55e; border: none; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .action-btn:disabled { background: #475569; }
 
-        .buy-btn { background: #22c55e; border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        .buy-btn:disabled { background: #475569; }
-
-        /* Адмін панель */
-        #admin-panel {
-            display: none;
-            position: fixed; top: 10px; background: #ef4444;
-            padding: 10px; border-radius: 10px; font-size: 12px; z-index: 100;
-        }
+        input { padding: 10px; border-radius: 8px; border: none; width: 100%; margin-bottom: 5px; }
+        
+        #admin-panel { display: none; background: #ef4444; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 12px; }
     </style>
 </head>
-<body id="main-body">
+<body id="b">
 
+<div class="card">
     <div id="admin-panel">
-        РЕЖИМ РОЗРОБНИКА: 
-        <button onclick="addMoney()">+1Т монеток</button>
-        <button onclick="localStorage.clear(); location.reload();">Скинути все</button>
+        АДМІН: <button onclick="coins+=1000000; u()">+1М 💰</button>
+        <button onclick="localStorage.clear(); location.reload()">Скидання</button>
     </div>
 
-    <div class="game-card">
-        <div style="font-size: 0.8rem; opacity: 0.6;">БАЛАНС (натисни для коду)</div>
-        <span id="balance" onclick="askPromo()">0</span>
+    <span id="balance">0</span>
+    <button id="click-btn" onclick="doClick()">КЛІК!</button>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="t1" onclick="tab('upg')">Прокачка</button>
+        <button class="tab-btn" id="t2" onclick="tab('shop')">Фони</button>
+        <button class="tab-btn" id="t3" onclick="tab('promo')">Промокоди</button>
+    </div>
+
+    <div id="upg" class="section active">
+        <div class="row">
+            <span>Клік +<span id="p-v">1</span></span>
+            <button class="action-btn" id="b-p" onclick="buyP()">Ціна: <span id="p-c">10</span></button>
+        </div>
+        <div class="row">
+            <span>Автоклікер</span>
+            <button class="action-btn" id="b-a" onclick="buyA()">2500</button>
+        </div>
+    </div>
+
+    <div id="shop" class="section">
+        <div class="row">
+            <span>🇺🇦 Україна</span>
+            <button class="action-btn" id="s1" onclick="buyTheme('bg-ukraine', 15000)">15,000</button>
+        </div>
+        <div class="row">
+            <span>🌌 Космос</span>
+            <button class="action-btn" id="s2" onclick="buyTheme('bg-space', 5000)">5,000</button>
+        </div>
+    </div>
+
+    <div id="promo" class="section">
+        <input type="text" id="p-input" placeholder="Введіть код тут...">
+        <button class="action-btn" style="width:100%" onclick="usePromo()">Активувати</button>
+    </div>
+</div>
+
+<script>
+    let coins = parseFloat(localStorage.getItem('c')) || 0;
+    let power = parseInt(localStorage.getItem('p')) || 1;
+    let cost = parseInt(localStorage.getItem('cs')) || 10;
+    let auto = localStorage.getItem('a') === 'true';
+    let themes = JSON.parse(localStorage.getItem('th')) || [];
+    let curTh = localStorage.getItem('ct') || '';
+
+    function u() {
+        document.getElementById('balance').innerText = Math.floor(coins).toLocaleString();
+        document.getElementById('p-v').innerText = power;
+        document.getElementById('p-c').innerText = cost;
+        document.getElementById('b-p').disabled = coins < cost;
         
-        <button id="click-btn">КЛІК!</button>
+        let ba = document.getElementById('b-a');
+        if(auto) { ba.innerText = "Є"; ba.disabled = true; } else { ba.disabled = coins < 2500; }
 
-        <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('upgrades')">Покращення</button>
-            <button class="tab-btn" onclick="showTab('shop')">Магазин фонів</button>
-        </div>
+        if(themes.includes('bg-ukraine')) document.getElementById('s1').innerText = "Обрати";
+        if(themes.includes('bg-space')) document.getElementById('s2').innerText = "Обрати";
+        
+        document.getElementById('b').className = curTh;
 
-        <div id="upgrades" class="content-section active">
-            <div class="item">
-                <span>Клік +1</span>
-                <button class="buy-btn" id="buy-power">Ціна: <span id="p-cost">10</span></button>
-            </div>
-            <div class="item">
-                <span>Автоклікер</span>
-                <button class="buy-btn" id="buy-auto">Ціна: 2500</button>
-            </div>
-        </div>
+        localStorage.setItem('c', coins);
+        localStorage.setItem('p', power);
+        localStorage.setItem('cs', cost);
+        localStorage.setItem('a', auto);
+        localStorage.setItem('th', JSON.stringify(themes));
+        localStorage.setItem('ct', curTh);
+    }
 
-        <div id="shop" class="content-section">
-            <div class="item">
-                <span>🌑 Темний (стандарт)</span>
-                <button class="buy-btn" onclick="setTheme('bg-dark', 0)">Встановити</button>
-            </div>
-            <div class="item">
-                <span>🌌 Космос</span>
-                <button class="buy-btn" id="btn-space" onclick="buyTheme('bg-space', 5000)">5,000 💰</button>
-            </div>
-            <div class="item">
-                <span>🇺🇦 Прапор України</span>
-                <button class="buy-btn" id="btn-ukraine" onclick="buyTheme('bg-ukraine', 15000)">15,000 💰</button>
-            </div>
-        </div>
-    </div>
+    function doClick() { coins += power; u(); }
+    
+    function buyP() { if(coins >= cost) { coins -= cost; power++; cost = Math.round(cost * 1.6); u(); } }
+    
+    function buyA() { if(coins >= 2500 && !auto) { coins -= 2500; auto = true; u(); } }
 
-    <script>
-        let coins = parseFloat(localStorage.getItem('f_coins')) || 0;
-        let power = parseInt(localStorage.getItem('f_power')) || 1;
-        let pCost = parseInt(localStorage.getItem('f_pcost')) || 10;
-        let hasAuto = localStorage.getItem('f_auto') === 'true';
-        let ownedThemes = JSON.parse(localStorage.getItem('f_themes')) || ['bg-dark'];
-        let currentTheme = localStorage.getItem('f_curr_theme') || 'bg-dark';
+    function buyTheme(t, p) {
+        if(themes.includes(t)) { curTh = t; }
+        else if(coins >= p) { coins -= p; themes.push(t); curTh = t; }
+        u();
+    }
 
-        function updateUI() {
-            document.getElementById('balance').innerText = Math.floor(coins).toLocaleString();
-            document.getElementById('p-cost').innerText = pCost.toLocaleString();
-            document.getElementById('buy-power').disabled = coins < pCost;
-            document.getElementById('buy-auto').disabled = (coins < 2500 || hasAuto);
-            if(hasAuto) document.getElementById('buy-auto').innerText = "АКТИВНО";
+    function tab(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'upg') document.getElementById('t1').classList.add('active');
+        if(id === 'shop') document.getElementById('t2').classList.add('active');
+        if(id === 'promo') document.getElementById('t3').classList.add('active');
+    }
 
-            // Оновлення кнопок магазину
-            if(ownedThemes.includes('bg-space')) document.getElementById('btn-space').innerText = "Обрати";
-            if(ownedThemes.includes('bg-ukraine')) document.getElementById('btn-ukraine').innerText = "Обрати";
-            
-            document.getElementById('main-body').className = currentTheme;
-
-            localStorage.setItem('f_coins', coins);
-            localStorage.setItem('f_power', power);
-            localStorage.setItem('f_pcost', pCost);
-            localStorage.setItem('f_auto', hasAuto);
-            localStorage.setItem('f_themes', JSON.stringify(ownedThemes));
-            localStorage.setItem('f_curr_theme', currentTheme);
+    function usePromo() {
+        let val = document.getElementById('p-input').value.trim().toLowerCase();
+        if(val === 'admin123') {
+            document.getElementById('admin-panel').style.display = 'block';
+            alert('Адмін активований!');
+        } else if(val === 'ukraine') {
+            coins += 5000;
+            alert('+5000 монет!');
+        } else {
+            alert('Невірний код');
         }
+        document.getElementById('p-input').value = '';
+        u();
+    }
 
-        // Логіка кліку
-        document.getElementById('click-btn').onclick = () => { coins += power; updateUI(); };
+    setInterval(() => { if(auto) { coins += power/2; u(); } }, 1000);
+    u();
+</script>
 
-        // Покращення
-        document.getElementById('buy-power').onclick = () => {
-            if(coins >= pCost) { coins -= pCost; power++; pCost = Math.round(pCost * 1.6); updateUI(); }
-        };
-
-        document.getElementById('buy-auto').onclick = () => {
-            if(coins >= 2500 && !hasAuto) { coins -= 2500; hasAuto = true; updateUI(); }
-        };
-
-        // Магазин фонів
-        function buyTheme(themeID, price) {
-            if(ownedThemes.includes(themeID)) {
-                currentTheme = themeID;
-            } else if(coins >= price) {
-                coins -= price;
-                ownedThemes.push(themeID);
-                currentTheme = themeID;
-            }
-            updateUI();
-        }
-
-        function setTheme(themeID) { currentTheme = themeID; updateUI(); }
-
-        // Промокоди та вкладки
-        function showTab(id) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        function askPromo() {
-            let code = prompt("Введіть секретний промокод:");
-            if(code === "admin123") {
-                document.getElementById('admin-panel').style.display = "block";
-                alert("Адмін-меню активовано!");
-            } else if(code === "UKRAINE") {
-                coins += 5000;
-                alert("Бонус 5,000 монет активовано!");
-                updateUI();
-            }
-        }
-
-        function addMoney() { coins += 1000000000; updateUI(); }
-
-        setInterval(() => { if(hasAuto) { coins += power/2; updateUI(); } }, 1000);
-        updateUI();
-    </script>
 </body>
 </html>
