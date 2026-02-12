@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Clicker Pro</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --gold: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+        }
+
+        .game-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            max-width: 900px;
+            width: 95%;
+        }
+
+        .main-card {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .leaderboard-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .score-val { font-size: 4rem; font-weight: 900; color: var(--primary); display: block; }
+        
+        #click-btn {
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #4338ca);
+            cursor: pointer;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.1s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        #click-btn:active { transform: scale(0.92); }
+
+        .shop-grid { display: grid; gap: 10px; margin-top: 20px; }
+
+        .btn-buy {
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: #334155;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+
+        .btn-buy:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-buy.active { background: #22c55e; }
+
+        .leader-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Анімація вилітаючих цифр */
+        .click-anim {
+            position: absolute;
+            color: var(--primary);
+            font-weight: bold;
+            pointer-events: none;
+            animation: moveUp 0.8s ease-out forwards;
+        }
+
+        @keyframes moveUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <div class="main-card">
+            <span class="score-val" id="balance">0</span>
+            <p>Монети (Авто: +<span id="auto-val">0</span>/сек)</p>
+
+            <button id="click-btn">ТИЦЬ!</button>
+
+            <div class="shop-grid">
+                <button id="buy-power" class="btn-buy">
+                    <span>Покращити клік (+1)</span>
+                    <span id="cost-power">10</span>
+                </button>
+                <button id="buy-auto" class="btn-buy">
+                    <span>Автоклікер (2500)</span>
+                    <span id="status-auto">Купити</span>
+                </button>
+            </div>
+            <br>
+            <button onclick="saveRecord()" style="background:none; border:1px solid #555; color:#aaa; cursor:pointer; padding:5px; border-radius:5px;">Записати рекорд у таблицю</button>
+        </div>
+
+        <div class="leaderboard-card">
+            <h3 style="color: var(--gold)">🏆 Лідерборд</h3>
+            <div id="leader-list">
+                </div>
+            <button onclick="localStorage.clear(); location.reload();" style="margin-top:20px; background:none; border:none; color:red; cursor:pointer; font-size:10px;">Скинути все</button>
+        </div>
+    </div>
+
+    <script>
+        // Дані
+        let coins = parseFloat(localStorage.getItem('c_coins')) || 0;
+        let power = parseInt(localStorage.getItem('c_power')) || 1;
+        let costPower = parseInt(localStorage.getItem('c_costP')) || 10;
+        let hasAuto = localStorage.getItem('c_auto') === 'true';
+        let leaders = JSON.parse(localStorage.getItem('c_leaders')) || [
+            {name: "Admin", score: 5000},
+            {name: "ProPlayer", score: 2500}
+        ];
+
+        const balEl = document.getElementById('balance');
+        const autoValEl = document.getElementById('auto-val');
+
+        function updateUI() {
+            balEl.innerText = Math.floor(coins).toLocaleString();
+            document.getElementById('cost-power').innerText = costPower;
+            autoValEl.innerText = hasAuto ? Math.max(1, Math.floor(power / 2)) : 0;
+            
+            document.getElementById('buy-power').disabled = coins < costPower;
+            
+            const autoBtn = document.getElementById('buy-auto');
+            if (hasAuto) {
+                autoBtn.disabled = true;
+                autoBtn.innerText = "АВТОКЛІКЕР ПРАЦЮЄ";
+                autoBtn.classList.add('active');
+            } else {
+                autoBtn.disabled = coins < 2500;
+            }
+
+            renderLeaders();
+            save();
+        }
+
+        function save() {
+            localStorage.setItem('c_coins', coins);
+            localStorage.setItem('c_power', power);
+            localStorage.setItem('c_costP', costPower);
+            localStorage.setItem('c_auto', hasAuto);
+            localStorage.setItem('c_leaders', JSON.stringify(leaders));
+        }
+
+        // Клік
+        document.getElementById('click-btn').onclick = (e) => {
+            coins += power;
+            showAnim(e);
+            updateUI();
+        };
+
+        // Купівля сили
+        document.getElementById('buy-power').onclick = () => {
+            if(coins >= costPower) {
+                coins -= costPower;
+                power++;
+                costPower = Math.round(costPower * 1.7);
+                updateUI();
+            }
+        };
+
+        // Купівля автоклікера
+        document.getElementById('buy-auto').onclick = () => {
+            if(!hasAuto && coins >= 2500) {
+                coins -= 2500;
+                hasAuto = true;
+                updateUI();
+            }
+        };
+
+        // Цикл автоклікера (раз на секунду)
+        setInterval(() => {
+            if(hasAuto) {
+                coins += Math.max(1, Math.floor(power / 2));
+                updateUI();
+            }
+        }, 1000);
+
+        // Анімація цифр
+        function showAnim(e) {
+            const n = document.createElement('div');
+            n.className = 'click-anim';
+            n.innerText = `+${power}`;
+            n.style.left = `${e.clientX}px`;
+            n.style.top = `${e.clientY}px`;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 800);
+        }
+
+        // Робота з лідербордом
+        function renderLeaders() {
+            const list = document.getElementById('leader-list');
+            list.innerHTML = '';
+            leaders.sort((a,b) => b.score - a.score).slice(0, 5).forEach(l => {
+                list.innerHTML += `<div class="leader-item"><span>${l.name}</span><b>${l.score}</b></div>`;
+            });
+        }
+
+        function saveRecord() {
+            const name = prompt("Введіть ваше ім'я:");
+            if(name) {
+                leaders.push({name: name, score: Math.floor(coins)});
+                updateUI();
+            }
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
